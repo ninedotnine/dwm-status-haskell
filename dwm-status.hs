@@ -58,12 +58,20 @@ mainLoop dpy = forever $ do
     let avgs = printf "[%.2f %.2f %.2f] " x y z
     batt <- getBattery
     temper <- getTemperature
-    setStatus dpy $ avgs ++ batt ++ temper ++ time
+    mail <- getMail
+    setStatus dpy $ avgs ++ batt ++ temper ++ mail ++ time
     threadDelay 1000000 -- sleep one second
 --     threadDelay 6000000 -- sleep six seconds
 --     threadDelay 10000000 -- sleep ten seconds
 --     threadDelay 60000000 -- sleep sixty seconds
    
+
+getMail :: IO String
+-- this file should be populated by cron
+getMail = do 
+    mail <- getFileData "/tmp/dwm-status.mail"
+    return $ "[mail " ++ show mail ++ "] "
+
 setStatus :: Display -> String -> IO ()
 setStatus dpy str = do
     let window = defaultRootWindow dpy
