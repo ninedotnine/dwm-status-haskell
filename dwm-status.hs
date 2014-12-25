@@ -149,7 +149,9 @@ getBattery = do
     -}
     let colour :: String
         colour = if chargin
-        then getColour 4 -- magenta
+        then if capacity > 95
+            then getColour 3 -- deep green
+            else getColour 4 -- magenta
         else if capacity > 70 
             then getColour 3 -- deep green
             else if capacity > 30 
